@@ -75,6 +75,17 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
         dto.setTradeOrderCode(IdUtil.getSnowflakeNextIdStr());
         dto.setPayOrderCode(IdUtil.getSnowflakeNextIdStr());
         dto.setResult(1);
+        MessageSendCallback callback = new MessageSendCallback() {
+            @Override
+            public void onSuccess(MessageResponse messageResponse) {
+//                log.info("send success -> {}", messageResponse);
+            }
+
+            @Override
+            public void onException(Throwable throwable) {
+
+            }
+        };
         messageProducer.asyncSend(MQConst.TOPIC_PAY, MQConst.TAG_PAY_NOTIFY, new MessagePayLoad(dto));
         return Maps.newHashMap();
     }
