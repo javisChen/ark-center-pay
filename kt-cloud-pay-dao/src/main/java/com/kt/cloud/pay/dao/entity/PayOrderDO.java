@@ -3,8 +3,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.kt.component.orm.mybatis.base.BaseEntity;
 import java.time.LocalDateTime;
-import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.TableField;
+
 import com.kt.component.common.enums.BasicEnums;
 import com.kt.component.common.enums.EnumUtils;
 import lombok.Data;
@@ -21,21 +20,27 @@ import lombok.Getter;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("pa_pay_order")
+@TableName("pay_order")
 public class PayOrderDO extends BaseEntity {
 
 
     /**
      * 业务订单号
      */
-    @TableField("biz_order_code")
-    private String bizOrderCode;
+    @TableField("biz_trade_no")
+    private String bizTradeNo;
 
     /**
      * 支付订单号
      */
-    @TableField("pay_order_code")
-    private String payOrderCode;
+    @TableField("pay_trade_no")
+    private String payTradeNo;
+
+    /**
+     * 第三方平台交易单号
+     */
+    @TableField("out_trade_no")
+    private String outTradeNo;
 
     /**
      * 支付类型编码
@@ -71,10 +76,10 @@ public class PayOrderDO extends BaseEntity {
     @AllArgsConstructor
     public enum Status implements BasicEnums {
         PENDING_PAY(1, "待支付"),
-            PAYING(2, "支付中"),
-            PAY_SUCCESS(3, "支付成功"),
-            PAY_FAIL(4, "支付失败"),
-    ;
+        PAYING(2, "支付中"),
+        PAY_SUCCESS(3, "支付成功"),
+        PAY_FAIL(4, "支付失败"),
+        ;
         private final Integer value;
         private final String text;
 

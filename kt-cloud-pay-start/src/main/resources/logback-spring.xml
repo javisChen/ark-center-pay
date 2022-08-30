@@ -69,17 +69,24 @@
         <queueSize>256</queueSize>
         <maxFlushTime>1000</maxFlushTime>
         <appender-ref ref="ROLLING"/>
+        <appender-ref ref="ERROR_ROLLING"/>
+        <appender-ref ref="WARN_ROLLING"/>
     </appender>
+
+
+    <springProfile name="local,dev,test,sit">
+        <logger name="com.kt.component.mq" level="DEBUG"/>
+    </springProfile>
 
     <root level="info">
         <springProfile name="local,dev,test,sit">
             <!-- local本地配置时候打开控制台输出 -->
             <appender-ref ref="STDOUT"/>
         </springProfile>
-        <!-- TODO 暂时这样定 -->
-        <appender-ref ref="ASYNC"/>
-        <appender-ref ref="ERROR_ROLLING"/>
-        <appender-ref ref="WARN_ROLLING"/>
+        <springProfile name="prod">
+            <!-- local本地配置时候打开控制台输出 -->
+            <appender-ref ref="ASYNC"/>
+        </springProfile>
     </root>
 
 </configuration>

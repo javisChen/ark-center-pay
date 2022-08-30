@@ -1,6 +1,5 @@
 package com.kt.cloud.pay.api.dto.request;
 
-import java.time.LocalDateTime;
 import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.NotEmpty;
@@ -21,7 +20,7 @@ public class PayOrderCreateReqDTO implements Serializable {
 
     @ApiModelProperty(value = "业务订单号", required = true)
     @NotEmpty(message = "业务订单号不能为空")
-    private String bizOrderCode;
+    private String bizTradeNo;
 
     @ApiModelProperty(value = "支付类型编码", required = true)
     @NotEmpty(message = "支付类型编码不能为空")

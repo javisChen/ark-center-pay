@@ -20,7 +20,7 @@ import lombok.Getter;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("pa_pay_type")
+@TableName("pay_type")
 public class PayTypeDO extends BaseEntity {
 
 

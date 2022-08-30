@@ -20,6 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface PayApi {
 
     @ApiOperation(value = "创建支付单")
-    @PostMapping("/order")
+    @PostMapping("/order/create")
     SingleResponse<PayOrderCreateRespDTO> createPayOrder(@RequestBody @Validated PayOrderCreateReqDTO reqDTO);
 }

@@ -20,7 +20,7 @@ import lombok.Getter;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("pa_pay_notify_record")
+@TableName("pay_notify_record")
 public class PayNotifyRecordDO extends BaseEntity {
 
 

@@ -15,7 +15,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.kt.cloud.pay.module.pay.mq.MQConst;
 import com.kt.component.dto.PageResponse;
-import com.kt.component.mq.MessagePayLoad;
+import com.kt.component.mq.Message;
 import com.kt.component.mq.MessageResponse;
 import com.kt.component.mq.MessageSendCallback;
 import com.kt.component.mq.core.producer.MessageProducer;
@@ -44,10 +44,10 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
 
     public PayOrderCreateRespDTO createPayOrder(PayOrderCreateReqDTO reqDTO) {
         PayOrderDO entity = new PayOrderDO();
-        String bizOrderCode = reqDTO.getBizOrderCode();
+        String bizOrderCode = reqDTO.getBizTradeNo();
         String payOrderCode = IdUtil.getSnowflakeNextIdStr();
-        entity.setBizOrderCode(bizOrderCode);
-        entity.setPayOrderCode(payOrderCode);
+        entity.setBizTradeNo(bizOrderCode);
+        entity.setPayTradeNo(payOrderCode);
         entity.setPayTypeCode(reqDTO.getPayTypeCode());
         entity.setAmount(reqDTO.getAmount());
         entity.setDescription(reqDTO.getDescription());
@@ -86,7 +86,7 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
 
             }
         };
-        messageProducer.asyncSend(MQConst.TOPIC_PAY, MQConst.TAG_PAY_NOTIFY, new MessagePayLoad(dto));
+        messageProducer.asyncSend(MQConst.TOPIC_PAY, MQConst.TAG_PAY_NOTIFY, new Message<>(dto), callback);
         return Maps.newHashMap();
     }
 
