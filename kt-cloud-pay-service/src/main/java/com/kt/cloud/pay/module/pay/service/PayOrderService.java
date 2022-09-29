@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Maps;
+import com.kt.cloud.order.api.response.OrderDetailRespDTO;
+import com.kt.cloud.pay.acl.order.OrderServiceFacade;
 import com.kt.cloud.pay.api.dto.mq.MQPayNotifyDTO;
 import com.kt.cloud.pay.dao.entity.PayOrderDO;
 import com.kt.cloud.pay.dao.mapper.PayOrderMapper;
@@ -15,12 +17,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.kt.cloud.pay.module.pay.mq.MQConst;
 import com.kt.component.dto.PageResponse;
+import com.kt.component.exception.BizException;
 import com.kt.component.mq.Message;
 import com.kt.component.mq.MessageResponse;
 import com.kt.component.mq.MessageSendCallback;
 import com.kt.component.mq.core.producer.MessageProducer;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.kt.component.web.util.bean.BeanConvertor;
 import com.kt.component.orm.mybatis.base.BaseEntity;
@@ -37,25 +40,31 @@ import java.util.Map;
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> implements IService<PayOrderDO> {
 
-    @Autowired
-    private MessageProducer messageProducer;
-
+    private final MessageProducer messageProducer;
+    private final OrderServiceFacade orderServiceFacade;
     public PayOrderCreateRespDTO createPayOrder(PayOrderCreateReqDTO reqDTO) {
-        PayOrderDO entity = new PayOrderDO();
-        String bizOrderCode = reqDTO.getBizTradeNo();
-        String payOrderCode = IdUtil.getSnowflakeNextIdStr();
-        entity.setBizTradeNo(bizOrderCode);
-        entity.setPayTradeNo(payOrderCode);
-        entity.setPayTypeCode(reqDTO.getPayTypeCode());
-        entity.setAmount(reqDTO.getAmount());
-        entity.setDescription(reqDTO.getDescription());
-        entity.setStatus(PayOrderDO.Status.PENDING_PAY.getValue());
-        save(entity);
+        log.info("[创建支付单]：入参：{}", reqDTO);
+        PayOrderDO payOrderDO = new PayOrderDO();
+        OrderDetailRespDTO order = orderServiceFacade.getOrder(reqDTO.getOrderId());
+        log.info("[创建支付单]：订单信息：{}", order);
+        String bizTradeNo = order.getTradeNo();
+        String payTradeNo = IdUtil.getSnowflakeNextIdStr();
+        payOrderDO.setBizTradeNo(bizTradeNo);
+        payOrderDO.setPayTradeNo(payTradeNo);
+        payOrderDO.setPayTypeCode(reqDTO.getPayTypeCode());
+        payOrderDO.setAmount(order.getActualAmount());
+        payOrderDO.setDescription(reqDTO.getDescription());
+        payOrderDO.setStatus(PayOrderDO.Status.PENDING_PAY.getValue());
+        log.info("[创建支付单]：支付单信息：{}", payOrderDO);
+        save(payOrderDO);
         PayOrderCreateRespDTO respDTO = new PayOrderCreateRespDTO();
-        respDTO.setBizOrderCode(bizOrderCode);
-        respDTO.setPayTypeCode(payOrderCode);
+        respDTO.setPayOrderId(payOrderDO.getId());
+        respDTO.setBizTradeNo(bizTradeNo);
+        respDTO.setPayTypeCode(reqDTO.getPayTypeCode());
+        log.info("[创建支付单]：成功：{}", respDTO);
         return respDTO;
     }
 
@@ -68,26 +77,39 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
     }
 
     public Map<String, Object> notify(JSONObject reqDTO) {
-        // todo 逻辑后补
+        log.info("[支付结果通知]：入参 = {}", reqDTO);
+        Long payOrderId = reqDTO.getLong("payOrderId");
+        Integer status = reqDTO.getInteger("status");
+        PayOrderDO payOrder = getById(payOrderId);
+
         // 推送支付结果到MQ
         MQPayNotifyDTO dto = new MQPayNotifyDTO();
-        dto.setOutTradeCode(IdUtil.getSnowflakeNextIdStr());
-        dto.setTradeOrderCode(IdUtil.getSnowflakeNextIdStr());
-        dto.setPayOrderCode(IdUtil.getSnowflakeNextIdStr());
+        dto.setOutTradeNo(payOrder.getOutTradeNo());
+        dto.setBizTradeNo(payOrder.getBizTradeNo());
+        dto.setPayOrderId(payOrder.getId());
+        dto.setPayTradeNo(payOrder.getPayTradeNo());
         dto.setResult(1);
-        MessageSendCallback callback = new MessageSendCallback() {
+
+        updatePayOrderStatus(payOrderId, status);
+        messageProducer.asyncSend(MQConst.TOPIC_PAY, MQConst.TAG_PAY_NOTIFY, new Message<>(dto), new MessageSendCallback() {
             @Override
             public void onSuccess(MessageResponse messageResponse) {
-//                log.info("send success -> {}", messageResponse);
+                log.info("send success -> {}", messageResponse);
             }
 
             @Override
             public void onException(Throwable throwable) {
 
             }
-        };
-        messageProducer.asyncSend(MQConst.TOPIC_PAY, MQConst.TAG_PAY_NOTIFY, new Message<>(dto), callback);
+        });
         return Maps.newHashMap();
+    }
+
+    private void updatePayOrderStatus(Long payOrderId, Integer status) {
+        lambdaUpdate()
+                .eq(BaseEntity::getId, payOrderId)
+                .set(PayOrderDO::getStatus, PayOrderDO.Status.PAY_SUCCESS.getValue())
+                .update();
     }
 
     public PayOrderCreateRespDTO getPayOrderInfo(Long payOrderId) {
@@ -95,4 +117,13 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
         return BeanConvertor.copy(entity, PayOrderCreateRespDTO.class);
     }
 
+    public Integer getPayOrderStatus(Long payOrderId) {
+        PayOrderDO payOrderDO = lambdaQuery()
+                .eq(BaseEntity::getId, payOrderId)
+                .one();
+        if (payOrderDO == null) {
+            throw new BizException("支付单号不存在");
+        }
+        return payOrderDO.getStatus();
+    }
 }

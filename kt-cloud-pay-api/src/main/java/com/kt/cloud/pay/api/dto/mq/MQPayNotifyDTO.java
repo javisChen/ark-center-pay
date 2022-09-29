@@ -5,11 +5,15 @@ import lombok.Data;
 @Data
 public class MQPayNotifyDTO {
 
-    public String outTradeCode;
+    public String outTradeNo;
 
-    public String tradeOrderCode;
+    public String bizTradeNo;
 
-    public String payOrderCode;
+    public Long orderId;
+
+    public Long payOrderId;
+
+    public String payTradeNo;
 
     public Integer result;
 }

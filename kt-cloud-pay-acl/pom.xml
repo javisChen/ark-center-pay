@@ -16,10 +16,23 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>com.kt.cloud</groupId>
             <artifactId>kt-cloud-pay-api</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.kt.cloud</groupId>
+            <artifactId>kt-cloud-order-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
     </dependencies>
 
 </project>

@@ -1,6 +1,7 @@
 package com.kt.cloud.pay.api.dto.request;
 
 import java.io.Serializable;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.NotEmpty;
 import io.swagger.annotations.ApiModel;
@@ -18,20 +19,15 @@ import lombok.Data;
 @ApiModel(value = "PayOrderCreateReqDTO", description = "生成支付单")
 public class PayOrderCreateReqDTO implements Serializable {
 
-    @ApiModelProperty(value = "业务订单号", required = true)
-    @NotEmpty(message = "业务订单号不能为空")
-    private String bizTradeNo;
+    @ApiModelProperty(value = "订单id", required = true)
+    @NotNull(message = ",不能为空")
+    private Long orderId;
 
     @ApiModelProperty(value = "支付类型编码", required = true)
-    @NotEmpty(message = "支付类型编码不能为空")
+    @NotBlank(message = "支付类型编码不能为空")
     private String payTypeCode;
 
-    @ApiModelProperty(value = "支付金额", required = true)
-    @NotNull(message = "支付金额不能为空")
-    private Integer amount;
-
     @ApiModelProperty(value = "支付单描述信息", required = true)
-    @NotEmpty(message = "支付单描述信息不能为空")
     private String description;
 
 }

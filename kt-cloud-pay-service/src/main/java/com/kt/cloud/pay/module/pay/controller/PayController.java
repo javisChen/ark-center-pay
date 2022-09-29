@@ -8,6 +8,7 @@ import com.kt.cloud.pay.api.dto.response.PayOrderCreateRespDTO;
 import com.kt.cloud.pay.module.pay.service.PayOrderService;
 import com.kt.component.dto.PageResponse;
 import com.kt.component.dto.SingleResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.bind.annotation.RestController;
 import com.kt.component.web.base.BaseController;
-import rx.Single;
 
 import java.util.Map;
 
@@ -34,18 +34,21 @@ import java.util.Map;
 @Validated
 @RestController
 @RequestMapping("/v1/pay")
+@RequiredArgsConstructor
 public class PayController extends BaseController implements PayApi {
 
     private final PayOrderService payOrderService;
 
-    public PayController(PayOrderService payOrderService) {
-        this.payOrderService = payOrderService;
-    }
-
     @ApiOperation(value = "创建支付单")
-    @PostMapping("/order")
+    @PostMapping("/order/create")
     public SingleResponse<PayOrderCreateRespDTO> createPayOrder(@RequestBody @Validated PayOrderCreateReqDTO reqDTO) {
         return SingleResponse.ok(payOrderService.createPayOrder(reqDTO));
+    }
+
+    @ApiOperation(value = "获取支付单状态")
+    @GetMapping("/order/status")
+    public SingleResponse<Integer> getPayOrderStatus(@RequestParam Long id) {
+        return SingleResponse.ok(payOrderService.getPayOrderStatus(id));
     }
 
     @ApiOperation(value = "订单通知")
