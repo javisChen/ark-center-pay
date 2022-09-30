@@ -91,7 +91,7 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
         dto.setResult(1);
 
         updatePayOrderStatus(payOrderId, status);
-        messageProducer.asyncSend(MQConst.TOPIC_PAY, MQConst.TAG_PAY_NOTIFY, new Message<>(dto), new MessageSendCallback() {
+        messageProducer.asyncSend(MQConst.TOPIC_PAY, MQConst.TAG_PAY_NOTIFY, Message.of(dto), new MessageSendCallback() {
             @Override
             public void onSuccess(MessageResponse messageResponse) {
                 log.info("send success -> {}", messageResponse);
