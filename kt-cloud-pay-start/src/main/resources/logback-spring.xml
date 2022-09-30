@@ -73,9 +73,9 @@
         <appender-ref ref="WARN_ROLLING"/>
     </appender>
 
-
     <springProfile name="local,dev,test,sit">
         <logger name="com.kt.component.mq" level="DEBUG"/>
+        <logger name="com.kt.cloud.pay.dao" level="DEBUG"/>
     </springProfile>
 
     <root level="info">
