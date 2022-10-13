@@ -1,6 +1,6 @@
 FROM openjdk:11-oraclelinux8
 WORKDIR /app
-COPY ./target/kt-cloud-pay.jar /app
+COPY ./target/ark-center-pay.jar /app
 EXPOSE 8080
 ENV SYS_OPT=""
-ENTRYPOINT java $SYS_OPT -jar /app/kt-cloud-pay.jar
+ENTRYPOINT java $SYS_OPT -jar /app/ark-center-pay.jar

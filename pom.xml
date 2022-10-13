@@ -4,23 +4,23 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.kt.cloud</groupId>
-    <artifactId>kt-cloud-pay</artifactId>
+    <groupId>com.ark.center</groupId>
+    <artifactId>ark-center-pay</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <modules>
-        <module>kt-cloud-pay-api</module>
-        <module>kt-cloud-pay-acl</module>
-        <module>kt-cloud-pay-dao</module>
-        <module>kt-cloud-pay-service</module>
-        <module>kt-cloud-pay-manager</module>
-        <module>kt-cloud-pay-start</module>
+        <module>ark-center-pay-api</module>
+        <module>ark-center-pay-acl</module>
+        <module>ark-center-pay-dao</module>
+        <module>ark-center-pay-service</module>
+        <module>ark-center-pay-manager</module>
+        <module>ark-center-pay-start</module>
     </modules>
     <packaging>pom</packaging>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <kt.dependencies.version>1.0.0-SNAPSHOT</kt.dependencies.version>
+        <ark.dependencies.version>1.0.0-SNAPSHOT</ark.dependencies.version>
     </properties>
 
     <dependencies>
@@ -35,45 +35,45 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.kt.boot</groupId>
-                <artifactId>kt-dependencies</artifactId>
+                <groupId>com.ark.boot</groupId>
+                <artifactId>ark-dependencies</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>com.kt.cloud</groupId>
-                <artifactId>kt-cloud-pay-dao</artifactId>
+                <groupId>com.ark.center</groupId>
+                <artifactId>ark-center-pay-dao</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.kt.cloud</groupId>
-                <artifactId>kt-cloud-pay-api</artifactId>
+                <groupId>com.ark.center</groupId>
+                <artifactId>ark-center-pay-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.kt.cloud</groupId>
-                <artifactId>kt-cloud-pay-acl</artifactId>
+                <groupId>com.ark.center</groupId>
+                <artifactId>ark-center-pay-acl</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.kt.cloud</groupId>
-                <artifactId>kt-cloud-pay-manager</artifactId>
+                <groupId>com.ark.center</groupId>
+                <artifactId>ark-center-pay-manager</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.kt.cloud</groupId>
-                <artifactId>kt-cloud-pay-service</artifactId>
+                <groupId>com.ark.center</groupId>
+                <artifactId>ark-center-pay-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.kt.mq</groupId>
-                <artifactId>kt-component-mq-integration-spring-boot-starter</artifactId>
+                <groupId>com.ark.mq</groupId>
+                <artifactId>ark-component-mq-integration-spring-boot-starter</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.kt.cloud</groupId>
-                <artifactId>kt-cloud-order-api</artifactId>
+                <groupId>com.ark.center</groupId>
+                <artifactId>ark-center-order-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

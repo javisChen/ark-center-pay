@@ -3,14 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>kt-cloud-pay</artifactId>
-        <groupId>com.kt.cloud</groupId>
+        <artifactId>ark-center-pay</artifactId>
+        <groupId>com.ark.center</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <artifactId>kt-cloud-pay-api</artifactId>
+    <artifactId>ark-center-pay-api</artifactId>
 
     <properties>
     </properties>
@@ -18,13 +18,13 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.kt.microservice</groupId>
-            <artifactId>kt-component-microservice-rpc-feign</artifactId>
+            <groupId>com.ark.microservice</groupId>
+            <artifactId>ark-component-microservice-rpc-feign</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.kt.dto</groupId>
-            <artifactId>kt-component-dto</artifactId>
+            <groupId>com.ark.dto</groupId>
+            <artifactId>ark-component-dto</artifactId>
         </dependency>
 
         <dependency>

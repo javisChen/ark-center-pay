@@ -9,8 +9,8 @@ spring:
     allow-bean-definition-overriding: true
 # mybatis
 mybatis-plus:
-  mapper-locations: classpath:com/kt/cloud/dao/*.xml
-kt:
+  mapper-locations: classpath:com/ark/center/dao/*.xml
+ark:
   mq:
     rocketmq:
       server: localhost:9876

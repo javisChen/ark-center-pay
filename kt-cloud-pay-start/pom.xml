@@ -3,27 +3,27 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>kt-cloud-pay</artifactId>
-        <groupId>com.kt.cloud</groupId>
+        <artifactId>ark-center-pay</artifactId>
+        <groupId>com.ark.center</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <artifactId>kt-cloud-pay-start</artifactId>
+    <artifactId>ark-center-pay-start</artifactId>
 
     <properties>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.kt.cloud</groupId>
-            <artifactId>kt-cloud-pay-service</artifactId>
+            <groupId>com.ark.center</groupId>
+            <artifactId>ark-center-pay-service</artifactId>
         </dependency>
     </dependencies>
 
     <build>
-        <finalName>kt-cloud-pay</finalName>
+        <finalName>ark-center-pay</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -35,7 +35,7 @@
                             <goal>repackage</goal>
                         </goals>
                         <configuration>
-                            <mainClass>com.kt.cloud.pay.Application</mainClass>
+                            <mainClass>com.ark.center.pay.Application</mainClass>
                         </configuration>
                     </execution>
                 </executions>
