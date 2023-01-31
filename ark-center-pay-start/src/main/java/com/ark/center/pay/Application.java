@@ -1,5 +1,6 @@
 package com.ark.center.pay;
 
+import com.ark.component.web.config.ArkWebConfig;
 import com.ark.component.web.config.CloudAppConfig;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -11,7 +12,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableFeignClients(basePackages = {})
 @EnableDiscoveryClient
-public class Application  extends CloudAppConfig {
+public class Application  extends ArkWebConfig {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
