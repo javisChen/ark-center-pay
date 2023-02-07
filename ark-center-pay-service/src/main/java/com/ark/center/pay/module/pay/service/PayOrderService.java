@@ -3,16 +3,16 @@ package com.ark.center.pay.module.pay.service;
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.ark.center.pay.acl.order.OrderServiceFacade;
+import com.ark.center.pay.api.dto.mq.PayNotifyMessage;
 import com.ark.center.pay.api.dto.request.PayOrderCreateReqDTO;
 import com.ark.center.pay.api.dto.request.PayOrderPageQueryReqDTO;
 import com.ark.center.pay.api.dto.response.PayOrderCreateRespDTO;
 import com.ark.center.pay.dao.entity.PayOrderDO;
 import com.ark.center.pay.dao.mapper.PayOrderMapper;
+import com.ark.center.trade.client.order.dto.OrderDTO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Maps;
-import com.ark.center.order.api.response.OrderDetailRespDTO;
-import com.ark.center.pay.api.dto.mq.MQPayNotifyDTO;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ark.center.pay.module.pay.mq.MQConst;
@@ -48,7 +48,7 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
     public PayOrderCreateRespDTO createPayOrder(PayOrderCreateReqDTO reqDTO) {
         log.info("[创建支付单]：入参：{}", reqDTO);
         PayOrderDO payOrderDO = new PayOrderDO();
-        OrderDetailRespDTO order = orderServiceFacade.getOrder(reqDTO.getOrderId());
+        OrderDTO order = orderServiceFacade.getOrder(reqDTO.getOrderId());
         log.info("[创建支付单]：订单信息：{}", order);
         String bizTradeNo = order.getTradeNo();
         String payTradeNo = IdUtil.getSnowflakeNextIdStr();
@@ -83,7 +83,7 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
         PayOrderDO payOrder = getById(payOrderId);
 
         // 推送支付结果到MQ
-        MQPayNotifyDTO dto = new MQPayNotifyDTO();
+        PayNotifyMessage dto = new PayNotifyMessage();
         dto.setOutTradeNo(payOrder.getOutTradeNo());
         dto.setBizTradeNo(payOrder.getBizTradeNo());
         dto.setPayOrderId(payOrder.getId());

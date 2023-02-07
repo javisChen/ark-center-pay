@@ -19,12 +19,12 @@
 
         <dependency>
             <groupId>com.ark.center</groupId>
-            <artifactId>ark-center-pay-api</artifactId>
+            <artifactId>ark-center-pay-client</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.ark.center</groupId>
-            <artifactId>ark-center-order-api</artifactId>
+            <artifactId>ark-center-trade-client</artifactId>
         </dependency>
 
         <dependency>

@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>ark-center-pay-api</module>
+        <module>ark-center-pay-client</module>
         <module>ark-center-pay-acl</module>
         <module>ark-center-pay-dao</module>
         <module>ark-center-pay-service</module>
@@ -49,7 +49,7 @@
             </dependency>
             <dependency>
                 <groupId>com.ark.center</groupId>
-                <artifactId>ark-center-pay-api</artifactId>
+                <artifactId>ark-center-pay-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -74,7 +74,7 @@
             </dependency>
             <dependency>
                 <groupId>com.ark.center</groupId>
-                <artifactId>ark-center-order-api</artifactId>
+                <artifactId>ark-center-trade-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
