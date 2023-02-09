@@ -79,6 +79,7 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
     public Map<String, Object> notify(JSONObject reqDTO) {
         log.info("[支付结果通知]：入参 = {}", reqDTO);
         Long payOrderId = reqDTO.getLong("payOrderId");
+        Long orderId = reqDTO.getLong("orderId");
         Integer status = reqDTO.getInteger("status");
         PayOrderDO payOrder = getById(payOrderId);
 
@@ -87,6 +88,7 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
         dto.setOutTradeNo(payOrder.getOutTradeNo());
         dto.setBizTradeNo(payOrder.getBizTradeNo());
         dto.setPayOrderId(payOrder.getId());
+        dto.setOrderId(orderId);
         dto.setPayTradeNo(payOrder.getPayTradeNo());
         dto.setResult(1);
 

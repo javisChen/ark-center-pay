@@ -11,10 +11,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableFeignClients(basePackages = {})
 @EnableDiscoveryClient
-public class Application  extends ArkWebConfig {
+public class PayApplication extends ArkWebConfig {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(PayApplication.class, args);
     }
 
 }

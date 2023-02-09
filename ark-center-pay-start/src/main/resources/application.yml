@@ -10,12 +10,3 @@ spring:
 # mybatis
 mybatis-plus:
   mapper-locations: classpath:com/ark/center/dao/*.xml
-
-ark:
-  component:
-    mq:
-      rocketmq:
-        producer:
-          group: pg_pay
-          enabled: false
-        server: localhost:9876

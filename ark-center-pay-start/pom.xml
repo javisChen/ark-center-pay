@@ -35,7 +35,7 @@
                             <goal>repackage</goal>
                         </goals>
                         <configuration>
-                            <mainClass>com.ark.center.pay.Application</mainClass>
+                            <mainClass>com.ark.center.pay.PayApplication</mainClass>
                         </configuration>
                     </execution>
                 </executions>
