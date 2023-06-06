@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
         name = "${ark.center.pay.service.name:pay}",
         path = "/v1/pay",
         url = "${ark.center.pay.service.uri:}",
-        decode404 = true,
+        dismiss404 = true,
         configuration = FeignCommonErrorDecoder.class
 )
 public interface PayApi {

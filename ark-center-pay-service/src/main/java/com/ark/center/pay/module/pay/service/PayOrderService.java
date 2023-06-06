@@ -1,7 +1,7 @@
 package com.ark.center.pay.module.pay.service;
 
 import cn.hutool.core.util.IdUtil;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.ark.center.pay.acl.order.OrderServiceFacade;
 import com.ark.center.pay.api.dto.mq.PayNotifyMessage;
 import com.ark.center.pay.api.dto.request.PayOrderCreateReqDTO;

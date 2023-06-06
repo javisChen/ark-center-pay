@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.FeignClient;
         name = "${ark.center.order.service.name:order}",
         path = "/v1/order",
         url = "${ark.center.order.service.uri:}",
-        decode404 = true,
+        dismiss404 = true,
         configuration = {FeignCommonErrorDecoder.class}
 )
 public interface OrderServiceApi extends OrderApi {
