@@ -9,7 +9,7 @@ import com.ark.component.dto.SingleResponse;
 import com.ark.component.validator.ValidateGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.web.bind.annotation.RequestMapping;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -29,7 +29,7 @@ import com.ark.component.web.base.BaseController;
  * @author EOP
  * @since 2022-08-11
  */
-@Tag(name = "支付结果通知记录", description = "支付结果通知记录")
+@Schema(name = "支付结果通知记录", description = "支付结果通知记录")
 @Validated
 @RestController
 @RequestMapping("/v1/pay-notify-record")
@@ -62,7 +62,7 @@ public class PayNotifyRecordController extends BaseController {
     @Operation(summary = "查询支付结果通知记录详情")
     @ApiImplicitParam(name = "id", value = "id")
     @GetMapping("/info")
-    public SingleResponse<PayNotifyRecordRespDTO> info(@RequestParam(required = false) @NotNull(message = "id不能为空") Long id) {
+    public SingleResponse<PayNotifyRecordRespDTO> info(@RequestParam(requiredMode = Schema.RequiredMode.NOT_REQUIRED) @NotNull(message = "id不能为空") Long id) {
         return SingleResponse.ok(payNotifyRecordService.getPayNotifyRecordInfo(id));
     }
 

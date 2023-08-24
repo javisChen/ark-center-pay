@@ -11,7 +11,7 @@ import com.ark.component.dto.SingleResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import io.swagger.annotations.Api;
@@ -34,7 +34,7 @@ import java.util.Map;
  * @author EOP
  * @since 2022-08-11
  */
-@Tag(name = "支付管理", description = "支付管理")
+@Schema(name = "支付管理", description = "支付管理")
 @Validated
 @RestController
 @RequestMapping("/v1/pay")
@@ -74,7 +74,7 @@ public class PayController extends BaseController implements PayApi {
             }
     )
     @GetMapping("/info")
-    public SingleResponse<PayOrderCreateRespDTO> info(@RequestParam(required = false) @NotNull(message = "id不能为空") Long id) {
+    public SingleResponse<PayOrderCreateRespDTO> info(@RequestParam(requiredMode = Schema.RequiredMode.NOT_REQUIRED) @NotNull(message = "id不能为空") Long id) {
         return SingleResponse.ok(payOrderService.getPayOrderInfo(id));
     }
 

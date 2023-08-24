@@ -21,7 +21,6 @@ import lombok.Data;
 public class PayNotifyRecordCreateReqDTO implements Serializable {
 
 
-
     @Schema(description = "业务订单号", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "业务订单号不能为空")
     private String bizOrderCode;
