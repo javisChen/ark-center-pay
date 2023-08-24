@@ -1,8 +1,7 @@
 package com.ark.center.pay.module.paytype.dto.request;
 
-import java.time.LocalDateTime;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import com.ark.component.dto.PagingQuery;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,17 +15,17 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "PayTypePageQueryReqDTO对象", description = "支付类别表")
+@Schema(description = "PayTypePageQueryReqDTO对象")
 public class PayTypePageQueryReqDTO extends PagingQuery {
 
 
-    @ApiModelProperty(value = "支付类型名称")
+    @Schema(description = "支付类型名称")
     private String name;
 
-    @ApiModelProperty(value = "支付类型编号")
+    @Schema(description = "支付类型编号")
     private String code;
 
-    @ApiModelProperty(value = "支付单描述信息")
+    @Schema(description = "支付单描述信息")
     private String description;
 
 }

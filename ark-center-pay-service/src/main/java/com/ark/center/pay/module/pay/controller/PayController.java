@@ -8,11 +8,15 @@ import com.ark.center.pay.api.dto.response.PayOrderCreateRespDTO;
 import com.ark.center.pay.module.pay.service.PayOrderService;
 import com.ark.component.dto.PageResponse;
 import com.ark.component.dto.SingleResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +34,7 @@ import java.util.Map;
  * @author EOP
  * @since 2022-08-11
  */
-@Api(tags = "支付订单表")
+@Tag(name = "支付管理", description = "支付管理")
 @Validated
 @RestController
 @RequestMapping("/v1/pay")
@@ -39,33 +43,36 @@ public class PayController extends BaseController implements PayApi {
 
     private final PayOrderService payOrderService;
 
-    @ApiOperation(value = "创建支付单")
+    @Operation(summary = "创建支付单")
     @PostMapping("/order/create")
     public SingleResponse<PayOrderCreateRespDTO> createPayOrder(@RequestBody @Validated PayOrderCreateReqDTO reqDTO) {
         return SingleResponse.ok(payOrderService.createPayOrder(reqDTO));
     }
 
-    @ApiOperation(value = "获取支付单状态")
+    @Operation(summary = "获取支付单状态")
     @GetMapping("/order/status")
     public SingleResponse<Integer> getPayOrderStatus(@RequestParam Long id) {
         return SingleResponse.ok(payOrderService.getPayOrderStatus(id));
     }
 
-    @ApiOperation(value = "订单通知")
+    @Operation(summary = "订单通知")
     @PostMapping("/notify")
     public SingleResponse<Map<String, Object>> notify(@RequestBody JSONObject reqDTO) {
         Map<String, Object> notify = payOrderService.notify(reqDTO);
         return SingleResponse.ok(notify);
     }
 
-    @ApiOperation(value = "查询支付订单表分页列表")
+    @Operation(summary = "查询支付订单表分页列表")
     @PostMapping("/page")
     public SingleResponse<PageResponse<PayOrderCreateRespDTO>> pageList(@RequestBody @Validated PayOrderPageQueryReqDTO queryDTO) {
         return SingleResponse.ok(payOrderService.getPageList(queryDTO));
     }
 
-    @ApiOperation(value = "查询支付订单表详情")
-    @ApiImplicitParam(name = "id", value = "id", required = true)
+    @Operation(summary = "查询支付订单表详情",
+            parameters = {
+                    @Parameter(name = "id", description = "支付单id")
+            }
+    )
     @GetMapping("/info")
     public SingleResponse<PayOrderCreateRespDTO> info(@RequestParam(required = false) @NotNull(message = "id不能为空") Long id) {
         return SingleResponse.ok(payOrderService.getPayOrderInfo(id));

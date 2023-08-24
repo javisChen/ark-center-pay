@@ -3,7 +3,7 @@ package com.ark.center.pay.module.paytype.dto.response;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -15,19 +15,19 @@ import lombok.Data;
  * @since 2022-08-11
  */
 @Data
-@ApiModel(value = "PayTypeRespDTO对象", description = "支付类别表")
+@Schema(description = "PayTypeRespDTO对象")
 public class PayTypeRespDTO implements Serializable {
 
-    @ApiModelProperty(value = "id", required = true)
+    @Schema(description = "id", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long id;
 
-    @ApiModelProperty(value = "支付类型名称", required = true)
+    @Schema(description = "支付类型名称", requiredMode = Schema.RequiredMode.REQUIRED)
     private String name;
 
-    @ApiModelProperty(value = "支付类型编号", required = true)
+    @Schema(description = "支付类型编号", requiredMode = Schema.RequiredMode.REQUIRED)
     private String code;
 
-    @ApiModelProperty(value = "支付单描述信息", required = true)
+    @Schema(description = "支付单描述信息", requiredMode = Schema.RequiredMode.REQUIRED)
     private String description;
 
 }

@@ -2,7 +2,7 @@ package com.ark.center.pay.api.dto.request;
 
 import java.time.LocalDateTime;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import com.ark.component.dto.PagingQuery;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,28 +16,28 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "PayOrderPageQueryReqDTO对象", description = "支付订单表")
+@Schema(description = "PayOrderPageQueryReqDTO对象")
 public class PayOrderPageQueryReqDTO extends PagingQuery {
 
-    @ApiModelProperty(value = "业务订单号")
+    @Schema(description = "业务订单号")
     private String bizOrderCode;
 
-    @ApiModelProperty(value = "支付订单号")
+    @Schema(description = "支付订单号")
     private String payOrderCode;
 
-    @ApiModelProperty(value = "支付类型编码")
+    @Schema(description = "支付类型编码")
     private String payTypeCode;
 
-    @ApiModelProperty(value = "支付金额")
+    @Schema(description = "支付金额")
     private Integer amount;
 
-    @ApiModelProperty(value = "支付单描述信息")
+    @Schema(description = "支付单描述信息")
     private String description;
 
-    @ApiModelProperty(value = "支付状态 enums[PENDING_PAY,待支付,1;PAYING,支付中,2;PAY_SUCCESS,支付成功,3;PAY_FAIL,支付失败,4]")
+    @Schema(description = "支付状态 enums[PENDING_PAY,待支付,1;PAYING,支付中,2;PAY_SUCCESS,支付成功,3;PAY_FAIL,支付失败,4]")
     private Integer status;
 
-    @ApiModelProperty(value = "最后一次支付结果通知时间")
+    @Schema(description = "最后一次支付结果通知时间")
     private LocalDateTime lastNotifyTime;
 
 }

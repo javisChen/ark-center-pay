@@ -7,10 +7,13 @@ import com.ark.center.pay.module.paynotifyrecord.service.PayNotifyRecordService;
 import com.ark.component.dto.PageResponse;
 import com.ark.component.dto.SingleResponse;
 import com.ark.component.validator.ValidateGroup;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +29,7 @@ import com.ark.component.web.base.BaseController;
  * @author EOP
  * @since 2022-08-11
  */
-@Api(tags = "支付结果通知记录")
+@Tag(name = "支付结果通知记录", description = "支付结果通知记录")
 @Validated
 @RestController
 @RequestMapping("/v1/pay-notify-record")
@@ -38,26 +41,26 @@ public class PayNotifyRecordController extends BaseController {
         this.payNotifyRecordService = payNotifyRecordService;
     }
 
-    @ApiOperation(value = "创建支付结果通知记录")
+    @Operation(summary = "创建支付结果通知记录")
     @PostMapping("/create")
     public SingleResponse<Long> create(@RequestBody @Validated PayNotifyRecordUpdateReqDTO reqDTO) {
         return SingleResponse.ok(payNotifyRecordService.createPayNotifyRecord(reqDTO));
     }
 
-    @ApiOperation(value = "修改支付结果通知记录")
+    @Operation(summary = "修改支付结果通知记录")
     @PostMapping("/update")
     public SingleResponse<Long> update(@RequestBody @Validated(ValidateGroup.Update.class) PayNotifyRecordUpdateReqDTO reqDTO) {
         return SingleResponse.ok(payNotifyRecordService.updatePayNotifyRecord(reqDTO));
     }
 
-    @ApiOperation(value = "查询支付结果通知记录分页列表")
+    @Operation(summary = "查询支付结果通知记录分页列表")
     @PostMapping("/page")
     public SingleResponse<PageResponse<PayNotifyRecordRespDTO>> pageList(@RequestBody @Validated PayNotifyRecordPageQueryReqDTO queryDTO) {
         return SingleResponse.ok(payNotifyRecordService.getPageList(queryDTO));
     }
 
-    @ApiOperation(value = "查询支付结果通知记录详情")
-    @ApiImplicitParam(name = "id", value = "id", required = true)
+    @Operation(summary = "查询支付结果通知记录详情")
+    @ApiImplicitParam(name = "id", value = "id")
     @GetMapping("/info")
     public SingleResponse<PayNotifyRecordRespDTO> info(@RequestParam(required = false) @NotNull(message = "id不能为空") Long id) {
         return SingleResponse.ok(payNotifyRecordService.getPayNotifyRecordInfo(id));
