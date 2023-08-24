@@ -9,7 +9,7 @@ import com.ark.component.dto.SingleResponse;
 import com.ark.component.validator.ValidateGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
-import import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.web.bind.annotation.RequestMapping;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -62,7 +62,7 @@ public class PayTypeController extends BaseController {
     @Operation(summary = "查询支付类别表详情")
     @ApiImplicitParam(name = "id", value = "id")
     @GetMapping("/info")
-    public SingleResponse<PayTypeRespDTO> info(@RequestParam(requiredMode = Schema.RequiredMode.NOT_REQUIRED) @NotNull(message = "id不能为空") Long id) {
+    public SingleResponse<PayTypeRespDTO> info(@RequestParam(required = false) @NotNull(message = "id不能为空") Long id) {
         return SingleResponse.ok(payTypeService.getPayTypeInfo(id));
     }
 
