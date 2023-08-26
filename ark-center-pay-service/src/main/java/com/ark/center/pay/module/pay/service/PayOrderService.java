@@ -10,6 +10,9 @@ import com.ark.center.pay.api.dto.response.PayOrderCreateRespDTO;
 import com.ark.center.pay.dao.entity.PayOrderDO;
 import com.ark.center.pay.dao.mapper.PayOrderMapper;
 import com.ark.center.trade.client.order.dto.OrderDTO;
+import com.ark.component.mq.MsgBody;
+import com.ark.component.mq.SendConfirm;
+import com.ark.component.mq.SendResult;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Maps;
@@ -18,9 +21,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ark.center.pay.module.pay.mq.MQConst;
 import com.ark.component.dto.PageResponse;
 import com.ark.component.exception.BizException;
-import com.ark.component.mq.Message;
-import com.ark.component.mq.MessageResponse;
-import com.ark.component.mq.MessageSendCallback;
 import com.ark.component.mq.core.producer.MessageProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -93,14 +93,14 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
         dto.setResult(1);
 
         updatePayOrderStatus(payOrderId, status);
-        messageProducer.asyncSend(MQConst.TOPIC_PAY, MQConst.TAG_PAY_NOTIFY, Message.of(dto), new MessageSendCallback() {
+        messageProducer.asyncSend(MQConst.TOPIC_PAY, MQConst.TAG_PAY_NOTIFY, MsgBody.of(dto), new SendConfirm() {
             @Override
-            public void onSuccess(MessageResponse messageResponse) {
-                log.info("send success -> {}", messageResponse);
+            public void onSuccess(SendResult sendResult) {
+
             }
 
             @Override
-            public void onException(Throwable throwable) {
+            public void onException(SendResult sendResult) {
 
             }
         });
