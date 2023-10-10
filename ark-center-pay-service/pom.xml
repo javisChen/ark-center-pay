@@ -55,6 +55,11 @@
             <groupId>com.ark.mq</groupId>
             <artifactId>ark-component-mq-integration-spring-boot-starter</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.ark.mq</groupId>
+            <artifactId>ark-component-mq-rocketmq-spring-boot-starter</artifactId>
+        </dependency>
         <!-- MQ -->
 
         <dependency>

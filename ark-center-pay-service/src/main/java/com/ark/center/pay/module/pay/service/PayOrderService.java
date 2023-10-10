@@ -9,24 +9,24 @@ import com.ark.center.pay.api.dto.request.PayOrderPageQueryReqDTO;
 import com.ark.center.pay.api.dto.response.PayOrderCreateRespDTO;
 import com.ark.center.pay.dao.entity.PayOrderDO;
 import com.ark.center.pay.dao.mapper.PayOrderMapper;
+import com.ark.center.pay.module.pay.mq.MQConst;
 import com.ark.center.trade.client.order.dto.OrderDTO;
+import com.ark.component.dto.PageResponse;
+import com.ark.component.exception.BizException;
 import com.ark.component.mq.MsgBody;
 import com.ark.component.mq.SendConfirm;
 import com.ark.component.mq.SendResult;
+import com.ark.component.mq.integration.MessageTemplate;
+import com.ark.component.orm.mybatis.base.BaseEntity;
+import com.ark.component.web.util.bean.BeanConvertor;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.google.common.collect.Maps;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ark.center.pay.module.pay.mq.MQConst;
-import com.ark.component.dto.PageResponse;
-import com.ark.component.exception.BizException;
-import com.ark.component.mq.core.producer.MessageProducer;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import com.ark.component.web.util.bean.BeanConvertor;
-import com.ark.component.orm.mybatis.base.BaseEntity;
 
 import java.util.Map;
 
@@ -43,7 +43,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> implements IService<PayOrderDO> {
 
-    private final MessageProducer messageProducer;
+    private final MessageTemplate messageTemplate;
     private final OrderServiceFacade orderServiceFacade;
     public PayOrderCreateRespDTO createPayOrder(PayOrderCreateReqDTO reqDTO) {
         log.info("[创建支付单]：入参：{}", reqDTO);
@@ -93,7 +93,7 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
         dto.setResult(1);
 
         updatePayOrderStatus(payOrderId, status);
-        messageProducer.asyncSend(MQConst.TOPIC_PAY, MQConst.TAG_PAY_NOTIFY, MsgBody.of(dto), new SendConfirm() {
+        messageTemplate.asyncSend(MQConst.TOPIC_PAY, MQConst.TAG_PAY_NOTIFY, MsgBody.of(dto), new SendConfirm() {
             @Override
             public void onSuccess(SendResult sendResult) {
 
