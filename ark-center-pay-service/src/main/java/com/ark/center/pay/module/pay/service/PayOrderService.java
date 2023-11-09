@@ -1,6 +1,7 @@
 package com.ark.center.pay.module.pay.service;
 
 import cn.hutool.core.util.IdUtil;
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.ark.center.pay.acl.order.OrderServiceFacade;
 import com.ark.center.pay.api.dto.mq.PayNotifyMessage;
@@ -96,12 +97,12 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
         messageTemplate.asyncSend(MQConst.TOPIC_PAY, MQConst.TAG_PAY_NOTIFY, MsgBody.of(dto), new SendConfirm() {
             @Override
             public void onSuccess(SendResult sendResult) {
-
+                log.info("Publish pay result successfully. body = [{}]", JSON.toJSONString(dto));
             }
 
             @Override
             public void onException(SendResult sendResult) {
-
+                log.error("Publish pay result failure. msgId = {}", sendResult.getMsgId(), sendResult.getThrowable());
             }
         });
         return Maps.newHashMap();

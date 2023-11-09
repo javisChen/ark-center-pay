@@ -31,7 +31,7 @@ public class PayNotifyRecordService extends ServiceImpl<PayNotifyRecordMapper, P
         return entity.getId();
     }
 
-    public PageResponse<PayNotifyRecordRespDTO> getPageList(PayNotifyRecordPageQueryReqDTO queryDTO) {
+    public PageResponse<PayNotifyRecordRespDTO> queryPages(PayNotifyRecordPageQueryReqDTO queryDTO) {
         IPage<PayNotifyRecordRespDTO> page = lambdaQuery()
                 .orderByDesc(BaseEntity::getGmtCreate)
                 .page(new Page<>(queryDTO.getCurrent(), queryDTO.getSize()))

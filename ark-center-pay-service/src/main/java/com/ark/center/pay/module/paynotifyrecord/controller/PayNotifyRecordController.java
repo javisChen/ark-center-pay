@@ -9,11 +9,8 @@ import com.ark.component.dto.SingleResponse;
 import com.ark.component.validator.ValidateGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.web.bind.annotation.RequestMapping;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.*;
@@ -54,9 +51,9 @@ public class PayNotifyRecordController extends BaseController {
     }
 
     @Operation(summary = "查询支付结果通知记录分页列表")
-    @PostMapping("/page")
-    public SingleResponse<PageResponse<PayNotifyRecordRespDTO>> pageList(@RequestBody @Validated PayNotifyRecordPageQueryReqDTO queryDTO) {
-        return SingleResponse.ok(payNotifyRecordService.getPageList(queryDTO));
+    @PostMapping("/pages")
+    public SingleResponse<PageResponse<PayNotifyRecordRespDTO>> queryPages(@RequestBody @Validated PayNotifyRecordPageQueryReqDTO queryDTO) {
+        return SingleResponse.ok(payNotifyRecordService.queryPages(queryDTO));
     }
 
     @Operation(summary = "查询支付结果通知记录详情")
