@@ -13,7 +13,7 @@ public class OrderServiceFacade {
     private final OrderServiceApi orderServiceApi;
 
     public OrderDTO getOrder(Long orderId) {
-        return RpcUtils.checkAndGetData(orderServiceApi.getOrderById(orderId));
+        return RpcUtils.checkAndGetData(orderServiceApi.queryDetails(orderId));
     }
 
 }

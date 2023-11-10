@@ -10,6 +10,7 @@ import com.ark.center.pay.api.dto.request.PayOrderPageQueryReqDTO;
 import com.ark.center.pay.api.dto.response.PayOrderCreateRespDTO;
 import com.ark.center.pay.dao.entity.PayOrderDO;
 import com.ark.center.pay.dao.mapper.PayOrderMapper;
+import com.ark.center.pay.module.pay.event.PayOrderCreatedEvent;
 import com.ark.center.pay.module.pay.mq.MQConst;
 import com.ark.center.trade.client.order.dto.OrderDTO;
 import com.ark.component.dto.PageResponse;
@@ -27,6 +28,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -46,10 +48,14 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
 
     private final MessageTemplate messageTemplate;
     private final OrderServiceFacade orderServiceFacade;
+    private final ApplicationEventPublisher eventPublisher;
+
     public PayOrderCreateRespDTO createPayOrder(PayOrderCreateReqDTO reqDTO) {
         log.info("[创建支付单]：入参：{}", reqDTO);
         PayOrderDO payOrderDO = new PayOrderDO();
-        OrderDTO order = orderServiceFacade.getOrder(reqDTO.getOrderId());
+
+        Long bizOrderId = reqDTO.getOrderId();
+        OrderDTO order = orderServiceFacade.getOrder(bizOrderId);
         log.info("[创建支付单]：订单信息：{}", order);
         String bizTradeNo = order.getTradeNo();
         String payTradeNo = IdUtil.getSnowflakeNextIdStr();
@@ -61,11 +67,16 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
         payOrderDO.setStatus(PayOrderDO.Status.PENDING_PAY.getValue());
         log.info("[创建支付单]：支付单信息：{}", payOrderDO);
         save(payOrderDO);
+
         PayOrderCreateRespDTO respDTO = new PayOrderCreateRespDTO();
-        respDTO.setPayOrderId(payOrderDO.getId());
+        Long payOrderId = payOrderDO.getId();
+        respDTO.setPayOrderId(payOrderId);
         respDTO.setBizTradeNo(bizTradeNo);
         respDTO.setPayTypeCode(reqDTO.getPayTypeCode());
-        log.info("[创建支付单]：成功：{}", respDTO);
+
+        // 发布事件
+        eventPublisher.publishEvent(new PayOrderCreatedEvent(this, bizOrderId, payOrderId, payTradeNo));
+
         return respDTO;
     }
 
@@ -89,7 +100,7 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
         dto.setOutTradeNo(payOrder.getOutTradeNo());
         dto.setBizTradeNo(payOrder.getBizTradeNo());
         dto.setPayOrderId(payOrder.getId());
-        dto.setOrderId(orderId);
+        dto.setBizOrderId(orderId);
         dto.setPayTradeNo(payOrder.getPayTradeNo());
         dto.setResult(1);
 
@@ -122,6 +133,7 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
 
     public Integer getPayOrderStatus(Long payOrderId) {
         PayOrderDO payOrderDO = lambdaQuery()
+                .select(BaseEntity::getId, PayOrderDO::getStatus)
                 .eq(BaseEntity::getId, payOrderId)
                 .one();
         if (payOrderDO == null) {

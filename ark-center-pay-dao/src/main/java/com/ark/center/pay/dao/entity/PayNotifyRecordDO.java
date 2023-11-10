@@ -2,8 +2,6 @@ package com.ark.center.pay.dao.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ark.component.orm.mybatis.base.BaseEntity;
-import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.ark.component.common.enums.BasicEnums;
 import com.ark.component.common.enums.EnumUtils;
 import lombok.Data;
@@ -27,14 +25,14 @@ public class PayNotifyRecordDO extends BaseEntity {
     /**
      * 业务订单号
      */
-    @TableField("biz_order_code")
-    private String bizOrderCode;
+    @TableField("biz_trade_no")
+    private String bizTradeNo;
 
     /**
      * 支付订单号
      */
-    @TableField("pay_order_code")
-    private String payOrderCode;
+    @TableField("pay_trade_no")
+    private String payTradeNo;
 
     /**
      * 通知请求体

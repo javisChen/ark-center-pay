@@ -5,9 +5,9 @@ import com.ark.component.microservice.rpc.exception.FeignCommonErrorDecoder;
 import org.springframework.cloud.openfeign.FeignClient;
 
 @FeignClient(
-        name = "${ark.center.order.service.name:order}",
+        name = "${ark.center.trade.service.name:trade}",
         path = "/v1/order",
-        url = "${ark.center.order.service.uri:}",
+        url = "${ark.center.trade.service.uri:}",
         dismiss404 = true,
         configuration = {FeignCommonErrorDecoder.class}
 )

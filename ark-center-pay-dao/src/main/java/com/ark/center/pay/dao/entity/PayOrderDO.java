@@ -78,8 +78,7 @@ public class PayOrderDO extends BaseEntity {
         PENDING_PAY(1, "待支付"),
         PAYING(2, "支付中"),
         PAY_SUCCESS(3, "支付成功"),
-        PAY_FAIL(4, "支付失败"),
-        ;
+        PAY_FAIL(4, "支付失败");
         private final Integer value;
         private final String text;
 
