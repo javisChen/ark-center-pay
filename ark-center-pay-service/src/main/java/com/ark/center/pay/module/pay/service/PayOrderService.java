@@ -1,5 +1,6 @@
 package com.ark.center.pay.module.pay.service;
 
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
@@ -15,6 +16,7 @@ import com.ark.center.pay.module.pay.mq.MQConst;
 import com.ark.center.trade.client.order.dto.OrderDTO;
 import com.ark.component.dto.PageResponse;
 import com.ark.component.exception.BizException;
+import com.ark.component.exception.ExceptionFactory;
 import com.ark.component.mq.MsgBody;
 import com.ark.component.mq.SendConfirm;
 import com.ark.component.mq.SendResult;
@@ -90,16 +92,19 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
 
     public Map<String, Object> notify(JSONObject reqDTO) {
         log.info("[支付结果通知]：入参 = {}", reqDTO);
-        Long payOrderId = reqDTO.getLong("payOrderId");
+        String payTradeNo = reqDTO.getString("payTradeNo");
         Long orderId = reqDTO.getLong("orderId");
         Integer status = reqDTO.getInteger("status");
-        PayOrderDO payOrder = getById(payOrderId);
+        PayOrderDO payOrder = getByTradeNo(payTradeNo);
+        Assert.notNull(payOrder, () -> ExceptionFactory.userException("支付单不存在"));
+
+        Long payOrderId = payOrder.getId();
 
         // 推送支付结果到MQ
         PayNotifyMessage dto = new PayNotifyMessage();
         dto.setOutTradeNo(payOrder.getOutTradeNo());
         dto.setBizTradeNo(payOrder.getBizTradeNo());
-        dto.setPayOrderId(payOrder.getId());
+        dto.setPayOrderId(payOrderId);
         dto.setBizOrderId(orderId);
         dto.setPayTradeNo(payOrder.getPayTradeNo());
         dto.setResult(1);
@@ -108,7 +113,7 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
         messageTemplate.asyncSend(MQConst.TOPIC_PAY, MQConst.TAG_PAY_NOTIFY, MsgBody.of(dto), new SendConfirm() {
             @Override
             public void onSuccess(SendResult sendResult) {
-                log.info("Publish pay result successfully. body = [{}]", JSON.toJSONString(dto));
+                log.info("Publish pay result successfully. msg = {}, body = [{}]", sendResult.getMsgId(), JSON.toJSONString(dto));
             }
 
             @Override
@@ -117,6 +122,13 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
             }
         });
         return Maps.newHashMap();
+    }
+
+    private PayOrderDO getByTradeNo(String payTradeNo) {
+        return lambdaQuery()
+                .eq(PayOrderDO::getPayTradeNo, payTradeNo)
+                .last("limit 1")
+                .one();
     }
 
     private void updatePayOrderStatus(Long payOrderId, Integer status) {
