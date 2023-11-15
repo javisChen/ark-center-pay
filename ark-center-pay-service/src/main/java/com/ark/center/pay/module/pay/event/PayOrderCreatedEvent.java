@@ -13,15 +13,18 @@ public class PayOrderCreatedEvent extends ApplicationEvent {
 
     private String payTradeNo;
 
+    private String payTypeCode;
+
     public PayOrderCreatedEvent(Object source) {
         super(source);
     }
 
-    public PayOrderCreatedEvent(Object source, Long bizOrderId, Long payOrderId, String payTradeNo) {
+    public PayOrderCreatedEvent(Object source, Long bizOrderId, Long payOrderId, String payTradeNo, String payTypeCode) {
         super(source);
         this.bizOrderId = bizOrderId;
         this.payOrderId = payOrderId;
         this.payTradeNo = payTradeNo;
+        this.payTypeCode = payTypeCode;
     }
 
 }

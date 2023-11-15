@@ -14,4 +14,7 @@ public class PayOrderCreatedMessage {
 
     @Schema(name = "支付交易单号", description = "支付交易单号", requiredMode = Schema.RequiredMode.REQUIRED)
     private String payTradeNo;
+
+    @Schema(name = "支付类型编码", description = "支付类型编码", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String payTypeCode;
 }

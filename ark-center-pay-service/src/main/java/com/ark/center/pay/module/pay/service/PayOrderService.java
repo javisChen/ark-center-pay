@@ -6,9 +6,9 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.ark.center.pay.acl.order.OrderServiceFacade;
 import com.ark.center.pay.api.dto.mq.PayNotifyMessage;
-import com.ark.center.pay.api.dto.request.PayOrderCreateReqDTO;
+import com.ark.center.pay.api.dto.request.PayOrderCreateCmd;
 import com.ark.center.pay.api.dto.request.PayOrderPageQueryReqDTO;
-import com.ark.center.pay.api.dto.response.PayOrderCreateRespDTO;
+import com.ark.center.pay.api.dto.response.PayOrderCreateDTO;
 import com.ark.center.pay.dao.entity.PayOrderDO;
 import com.ark.center.pay.dao.mapper.PayOrderMapper;
 import com.ark.center.pay.module.pay.event.PayOrderCreatedEvent;
@@ -52,42 +52,44 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
     private final OrderServiceFacade orderServiceFacade;
     private final ApplicationEventPublisher eventPublisher;
 
-    public PayOrderCreateRespDTO createPayOrder(PayOrderCreateReqDTO reqDTO) {
-        log.info("[创建支付单]：入参：{}", reqDTO);
+    public PayOrderCreateDTO createPayOrder(PayOrderCreateCmd createCmd) {
+        log.info("[创建支付单]：入参：{}", createCmd);
+        String payTypeCode = createCmd.getPayTypeCode();
+
         PayOrderDO payOrderDO = new PayOrderDO();
 
-        Long bizOrderId = reqDTO.getOrderId();
+        Long bizOrderId = createCmd.getOrderId();
         OrderDTO order = orderServiceFacade.getOrder(bizOrderId);
         log.info("[创建支付单]：订单信息：{}", order);
         String bizTradeNo = order.getTradeNo();
         String payTradeNo = IdUtil.getSnowflakeNextIdStr();
         payOrderDO.setBizTradeNo(bizTradeNo);
         payOrderDO.setPayTradeNo(payTradeNo);
-        payOrderDO.setPayTypeCode(reqDTO.getPayTypeCode());
+        payOrderDO.setPayTypeCode(payTypeCode);
         payOrderDO.setAmount(order.getActualAmount());
-        payOrderDO.setDescription(reqDTO.getDescription());
+        payOrderDO.setDescription(createCmd.getDescription());
         payOrderDO.setStatus(PayOrderDO.Status.PENDING_PAY.getValue());
         log.info("[创建支付单]：支付单信息：{}", payOrderDO);
         save(payOrderDO);
 
-        PayOrderCreateRespDTO respDTO = new PayOrderCreateRespDTO();
+        PayOrderCreateDTO dto = new PayOrderCreateDTO();
         Long payOrderId = payOrderDO.getId();
-        respDTO.setPayOrderId(payOrderId);
-        respDTO.setBizTradeNo(bizTradeNo);
-        respDTO.setPayTypeCode(reqDTO.getPayTypeCode());
+        dto.setPayOrderId(payOrderId);
+        dto.setBizTradeNo(bizTradeNo);
+        dto.setPayTypeCode(payTypeCode);
 
         // 发布事件
-        eventPublisher.publishEvent(new PayOrderCreatedEvent(this, bizOrderId, payOrderId, payTradeNo));
+        eventPublisher.publishEvent(new PayOrderCreatedEvent(this, bizOrderId, payOrderId, payTradeNo, payTypeCode));
 
-        return respDTO;
+        return dto;
     }
 
-    public PageResponse<PayOrderCreateRespDTO> getPageList(PayOrderPageQueryReqDTO queryDTO) {
-        IPage<PayOrderCreateRespDTO> page = lambdaQuery()
+    public PageResponse<PayOrderCreateDTO> getPageList(PayOrderPageQueryReqDTO queryDTO) {
+        IPage<PayOrderCreateDTO> page = lambdaQuery()
                 .orderByDesc(BaseEntity::getGmtCreate)
                 .page(new Page<>(queryDTO.getCurrent(), queryDTO.getSize()))
-                .convert(item -> BeanConvertor.copy(item, PayOrderCreateRespDTO.class));
-        return BeanConvertor.copyPage(page, PayOrderCreateRespDTO.class);
+                .convert(item -> BeanConvertor.copy(item, PayOrderCreateDTO.class));
+        return BeanConvertor.copyPage(page, PayOrderCreateDTO.class);
     }
 
     public Map<String, Object> notify(JSONObject reqDTO) {
@@ -138,9 +140,9 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
                 .update();
     }
 
-    public PayOrderCreateRespDTO getPayOrderInfo(Long payOrderId) {
+    public PayOrderCreateDTO getPayOrderInfo(Long payOrderId) {
         PayOrderDO entity = getById(payOrderId);
-        return BeanConvertor.copy(entity, PayOrderCreateRespDTO.class);
+        return BeanConvertor.copy(entity, PayOrderCreateDTO.class);
     }
 
     public Integer getPayOrderStatus(Long payOrderId) {

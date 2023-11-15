@@ -3,8 +3,6 @@ package com.ark.center.pay.api.dto.request;
 import java.io.Serializable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.NotEmpty;
-import io.swagger.annotations.ApiModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 /**
@@ -17,7 +15,7 @@ import lombok.Data;
  */
 @Data
 @Schema(description = "PayOrderCreateReqDTO")
-public class PayOrderCreateReqDTO implements Serializable {
+public class PayOrderCreateCmd implements Serializable {
 
     @Schema(description = "订单id", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = ",不能为空")
