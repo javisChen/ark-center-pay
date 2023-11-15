@@ -34,6 +34,7 @@ public class PayEventListener {
         message.setBizOrderId(event.getBizOrderId());
         message.setPayOrderId(event.getPayOrderId());
         message.setPayTradeNo(event.getPayTradeNo());
+        message.setPayTypeCode(event.getPayTypeCode());
 
         messageTemplate.asyncSend(MQConst.TOPIC_PAY, MQConst.TAG_PAY_ORDER_CREATED, MsgBody.of(message), new SendConfirm() {
             @Override

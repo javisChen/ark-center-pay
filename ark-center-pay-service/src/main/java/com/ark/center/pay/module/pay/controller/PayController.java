@@ -2,21 +2,17 @@ package com.ark.center.pay.module.pay.controller;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.ark.center.pay.api.PayApi;
-import com.ark.center.pay.api.dto.request.PayOrderCreateReqDTO;
+import com.ark.center.pay.api.dto.request.PayOrderCreateCmd;
 import com.ark.center.pay.api.dto.request.PayOrderPageQueryReqDTO;
-import com.ark.center.pay.api.dto.response.PayOrderCreateRespDTO;
+import com.ark.center.pay.api.dto.response.PayOrderCreateDTO;
 import com.ark.center.pay.module.pay.service.PayOrderService;
 import com.ark.component.dto.PageResponse;
 import com.ark.component.dto.SingleResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +41,7 @@ public class PayController extends BaseController implements PayApi {
 
     @Operation(summary = "创建支付单")
     @PostMapping("/order/create")
-    public SingleResponse<PayOrderCreateRespDTO> createPayOrder(@RequestBody @Validated PayOrderCreateReqDTO reqDTO) {
+    public SingleResponse<PayOrderCreateDTO> createPayOrder(@RequestBody @Validated PayOrderCreateCmd reqDTO) {
         return SingleResponse.ok(payOrderService.createPayOrder(reqDTO));
     }
 
@@ -64,7 +60,7 @@ public class PayController extends BaseController implements PayApi {
 
     @Operation(summary = "查询支付订单表分页列表")
     @PostMapping("/page")
-    public SingleResponse<PageResponse<PayOrderCreateRespDTO>> pageList(@RequestBody @Validated PayOrderPageQueryReqDTO queryDTO) {
+    public SingleResponse<PageResponse<PayOrderCreateDTO>> pageList(@RequestBody @Validated PayOrderPageQueryReqDTO queryDTO) {
         return SingleResponse.ok(payOrderService.getPageList(queryDTO));
     }
 
@@ -74,7 +70,7 @@ public class PayController extends BaseController implements PayApi {
             }
     )
     @GetMapping("/info")
-    public SingleResponse<PayOrderCreateRespDTO> info(@RequestParam(required = false)
+    public SingleResponse<PayOrderCreateDTO> info(@RequestParam(required = false)
                                                       @NotNull(message = "id不能为空") Long id) {
         return SingleResponse.ok(payOrderService.getPayOrderInfo(id));
     }

@@ -1,11 +1,9 @@
 package com.ark.center.pay.api.dto.response;
 
 import java.io.Serializable;
-import io.swagger.annotations.ApiModel;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-
-import jakarta.validation.constraints.NotEmpty;
 
 /**
  * <p>
@@ -17,7 +15,7 @@ import jakarta.validation.constraints.NotEmpty;
  */
 @Data
 @Schema(description = "PayOrderCreateRespDTO")
-public class PayOrderCreateRespDTO implements Serializable {
+public class PayOrderCreateDTO implements Serializable {
 
     @Schema(description = "支付单ID", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long payOrderId;

@@ -1,7 +1,7 @@
 package com.ark.center.pay.api;
 
-import com.ark.center.pay.api.dto.request.PayOrderCreateReqDTO;
-import com.ark.center.pay.api.dto.response.PayOrderCreateRespDTO;
+import com.ark.center.pay.api.dto.request.PayOrderCreateCmd;
+import com.ark.center.pay.api.dto.response.PayOrderCreateDTO;
 import com.ark.component.dto.SingleResponse;
 import com.ark.component.microservice.rpc.exception.FeignCommonErrorDecoder;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,5 +21,5 @@ public interface PayApi {
 
     @Operation(summary = "创建支付单")
     @PostMapping("/order/create")
-    SingleResponse<PayOrderCreateRespDTO> createPayOrder(@RequestBody @Validated PayOrderCreateReqDTO reqDTO);
+    SingleResponse<PayOrderCreateDTO> createPayOrder(@RequestBody @Validated PayOrderCreateCmd reqDTO);
 }
