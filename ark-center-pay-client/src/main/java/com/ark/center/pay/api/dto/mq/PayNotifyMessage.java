@@ -12,9 +12,6 @@ public class PayNotifyMessage {
     @Schema(name = "业务交易单号", description = "业务交易单号", requiredMode = Schema.RequiredMode.REQUIRED)
     private String bizTradeNo;
 
-    @Schema(name = "业务订单id", description = "业务订单id", requiredMode = Schema.RequiredMode.REQUIRED)
-    private Long bizOrderId;
-
     @Schema(name = "支付单id", description = "支付单id", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long payOrderId;
 

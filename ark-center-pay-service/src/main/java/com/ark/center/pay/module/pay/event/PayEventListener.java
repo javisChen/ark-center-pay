@@ -2,6 +2,7 @@ package com.ark.center.pay.module.pay.event;
 
 import com.alibaba.fastjson2.JSON;
 import com.ark.center.pay.api.dto.mq.PayOrderCreatedMessage;
+import com.ark.center.pay.dao.entity.PayOrderDO;
 import com.ark.center.pay.module.pay.mq.MQConst;
 import com.ark.component.mq.MsgBody;
 import com.ark.component.mq.SendConfirm;
@@ -28,13 +29,16 @@ public class PayEventListener {
     @EventListener
     public void onApplicationEvent(@NotNull PayOrderCreatedEvent event) {
 
-        log.info("[支付单创建成功]：{}", event);
+        PayOrderDO payOrder = event.getPayOrder();
+        log.info("支付单已生成: {}", payOrder);
 
         PayOrderCreatedMessage message = new PayOrderCreatedMessage();
-        message.setBizOrderId(event.getBizOrderId());
-        message.setPayOrderId(event.getPayOrderId());
-        message.setPayTradeNo(event.getPayTradeNo());
-        message.setPayTypeCode(event.getPayTypeCode());
+        message.setBizTradeNo(payOrder.getBizTradeNo());
+        message.setPayOrderId(payOrder.getId());
+        message.setPayTradeNo(payOrder.getPayTradeNo());
+        message.setPayTypeCode(payOrder.getPayTypeCode());
+        message.setPayTypeId(payOrder.getPayTypeId());
+        message.setPayTypeCode(payOrder.getPayTypeCode());
 
         messageTemplate.asyncSend(MQConst.TOPIC_PAY, MQConst.TAG_PAY_ORDER_CREATED, MsgBody.of(message), new SendConfirm() {
             @Override

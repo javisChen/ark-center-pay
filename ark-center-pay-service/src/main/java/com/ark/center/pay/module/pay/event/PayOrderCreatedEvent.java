@@ -1,5 +1,7 @@
 package com.ark.center.pay.module.pay.event;
 
+import com.ark.center.pay.dao.entity.PayOrderDO;
+import com.ark.component.common.ParamsChecker;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.ApplicationEvent;
@@ -7,24 +9,11 @@ import org.springframework.context.ApplicationEvent;
 @Setter
 public class PayOrderCreatedEvent extends ApplicationEvent {
 
-    private Long bizOrderId;
+    private PayOrderDO payOrder;
 
-    private Long payOrderId;
-
-    private String payTradeNo;
-
-    private String payTypeCode;
-
-    public PayOrderCreatedEvent(Object source) {
+    public PayOrderCreatedEvent(Object source, PayOrderDO payOrder) {
         super(source);
-    }
-
-    public PayOrderCreatedEvent(Object source, Long bizOrderId, Long payOrderId, String payTradeNo, String payTypeCode) {
-        super(source);
-        this.bizOrderId = bizOrderId;
-        this.payOrderId = payOrderId;
-        this.payTradeNo = payTradeNo;
-        this.payTypeCode = payTypeCode;
+        this.payOrder = payOrder;
     }
 
 }

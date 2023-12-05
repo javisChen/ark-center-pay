@@ -6,8 +6,8 @@ import lombok.Data;
 @Data
 public class PayOrderCreatedMessage {
 
-    @Schema(name = "业务订单id", description = "业务订单id", requiredMode = Schema.RequiredMode.REQUIRED)
-    private Long bizOrderId;
+    @Schema(name = "业务订单号", description = "业务订单号", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String bizTradeNo;
 
     @Schema(name = "支付单id", description = "支付单id", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long payOrderId;
@@ -17,4 +17,7 @@ public class PayOrderCreatedMessage {
 
     @Schema(name = "支付类型编码", description = "支付类型编码", requiredMode = Schema.RequiredMode.REQUIRED)
     private String payTypeCode;
+
+    @Schema(name = "支付类型id", description = "支付类型id", requiredMode = Schema.RequiredMode.REQUIRED)
+    private Integer payTypeId;
 }

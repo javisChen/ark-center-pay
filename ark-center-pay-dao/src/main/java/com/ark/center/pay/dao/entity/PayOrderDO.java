@@ -48,6 +48,13 @@ public class PayOrderDO extends BaseEntity {
     @TableField("pay_type_code")
     private String payTypeCode;
 
+
+    /**
+     * 支付类型id
+     */
+    @TableField("pay_type_id")
+    private Integer payTypeId;
+
     /**
      * 支付金额
      */

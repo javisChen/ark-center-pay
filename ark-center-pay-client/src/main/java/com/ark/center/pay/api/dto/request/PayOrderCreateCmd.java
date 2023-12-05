@@ -17,13 +17,17 @@ import lombok.Data;
 @Schema(description = "PayOrderCreateReqDTO")
 public class PayOrderCreateCmd implements Serializable {
 
-    @Schema(description = "订单id", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = ",不能为空")
-    private Long orderId;
+    @Schema(description = "业务交易单号", requiredMode = Schema.RequiredMode.REQUIRED)
+    @NotBlank(message = "业务交易单号不能为空")
+    private String bizTradeNo;
 
     @Schema(description = "支付类型编码", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "支付类型编码不能为空")
     private String payTypeCode;
+
+    @Schema(description = "支付类型id", requiredMode = Schema.RequiredMode.REQUIRED)
+    @NotNull(message = "支付类型id不能为空")
+    private Integer payTypeId;
 
     @Schema(description = "支付单描述信息", requiredMode = Schema.RequiredMode.REQUIRED)
     private String description;

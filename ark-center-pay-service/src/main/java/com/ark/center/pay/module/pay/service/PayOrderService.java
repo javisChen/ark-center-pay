@@ -53,23 +53,24 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
     private final ApplicationEventPublisher eventPublisher;
 
     public PayOrderCreateDTO createPayOrder(PayOrderCreateCmd createCmd) {
-        log.info("[创建支付单]：入参：{}", createCmd);
+        log.info("生成支付单,入参：{}", createCmd);
         String payTypeCode = createCmd.getPayTypeCode();
+        Integer payTypeId = createCmd.getPayTypeId();
+        String bizTradeNo = createCmd.getBizTradeNo();
+        String payTradeNo = IdUtil.getSnowflakeNextIdStr();
+
+        OrderDTO order = orderServiceFacade.queryOrder(bizTradeNo);
+        Assert.notNull(order, () -> ExceptionFactory.userException("交易单" + bizTradeNo + "不存在"));
+        log.info("交易单信息：{}", order.getOrderBase());
 
         PayOrderDO payOrderDO = new PayOrderDO();
-
-        Long bizOrderId = createCmd.getOrderId();
-        OrderDTO order = orderServiceFacade.getOrder(bizOrderId);
-        log.info("[创建支付单]：订单信息：{}", order);
-        String bizTradeNo = order.getTradeNo();
-        String payTradeNo = IdUtil.getSnowflakeNextIdStr();
         payOrderDO.setBizTradeNo(bizTradeNo);
         payOrderDO.setPayTradeNo(payTradeNo);
         payOrderDO.setPayTypeCode(payTypeCode);
-        payOrderDO.setAmount(order.getActualAmount());
+        payOrderDO.setPayTypeId(payTypeId);
+        payOrderDO.setAmount(order.getOrderAmount().getActualAmount());
         payOrderDO.setDescription(createCmd.getDescription());
         payOrderDO.setStatus(PayOrderDO.Status.PENDING_PAY.getValue());
-        log.info("[创建支付单]：支付单信息：{}", payOrderDO);
         save(payOrderDO);
 
         PayOrderCreateDTO dto = new PayOrderCreateDTO();
@@ -79,7 +80,7 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
         dto.setPayTypeCode(payTypeCode);
 
         // 发布事件
-        eventPublisher.publishEvent(new PayOrderCreatedEvent(this, bizOrderId, payOrderId, payTradeNo, payTypeCode));
+        eventPublisher.publishEvent(new PayOrderCreatedEvent(this, payOrderDO));
 
         return dto;
     }
@@ -93,9 +94,9 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
     }
 
     public Map<String, Object> notify(JSONObject reqDTO) {
-        log.info("[支付结果通知]：入参 = {}", reqDTO);
+        log.info("支付结果通知：入参 = {}", reqDTO);
         String payTradeNo = reqDTO.getString("payTradeNo");
-        Long orderId = reqDTO.getLong("orderId");
+        String bizTradeNo = reqDTO.getString("bizTradeNo");
         Integer status = reqDTO.getInteger("status");
         PayOrderDO payOrder = getByTradeNo(payTradeNo);
         Assert.notNull(payOrder, () -> ExceptionFactory.userException("支付单不存在"));
@@ -107,7 +108,7 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
         dto.setOutTradeNo(payOrder.getOutTradeNo());
         dto.setBizTradeNo(payOrder.getBizTradeNo());
         dto.setPayOrderId(payOrderId);
-        dto.setBizOrderId(orderId);
+        dto.setBizTradeNo(bizTradeNo);
         dto.setPayTradeNo(payOrder.getPayTradeNo());
         dto.setResult(1);
 
@@ -115,7 +116,7 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
         messageTemplate.asyncSend(MQConst.TOPIC_PAY, MQConst.TAG_PAY_NOTIFY, MsgBody.of(dto), new SendConfirm() {
             @Override
             public void onSuccess(SendResult sendResult) {
-                log.info("Publish pay result successfully. msg = {}, body = [{}]", sendResult.getMsgId(), JSON.toJSONString(dto));
+                log.info("Publish pay result successfully. msg = {}, body = {}", sendResult.getMsgId(), JSON.toJSONString(dto));
             }
 
             @Override
