@@ -1,0 +1,15 @@
+version: '3'
+services:
+  pay:
+    container_name: ark-center-pay
+    image: ark-center-pay:1.0.0
+    restart: always
+    ports:
+      - "8085:8085"
+    env_file:
+      - start.env
+    networks:
+      - "compose_default"
+networks:
+  compose_default:
+    external: true
