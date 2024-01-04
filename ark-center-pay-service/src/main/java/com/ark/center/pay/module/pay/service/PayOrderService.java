@@ -87,7 +87,7 @@ public class PayOrderService extends ServiceImpl<PayOrderMapper, PayOrderDO> imp
 
     public PageResponse<PayOrderCreateDTO> getPageList(PayOrderPageQueryReqDTO queryDTO) {
         IPage<PayOrderCreateDTO> page = lambdaQuery()
-                .orderByDesc(BaseEntity::getGmtCreate)
+                .orderByDesc(BaseEntity::getCreateTime)
                 .page(new Page<>(queryDTO.getCurrent(), queryDTO.getSize()))
                 .convert(item -> BeanConvertor.copy(item, PayOrderCreateDTO.class));
         return BeanConvertor.copyPage(page, PayOrderCreateDTO.class);
