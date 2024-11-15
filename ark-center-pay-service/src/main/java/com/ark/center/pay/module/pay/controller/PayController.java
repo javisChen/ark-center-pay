@@ -39,7 +39,7 @@ public class PayController extends BaseController implements PayApi {
 
     private final PayOrderService payOrderService;
 
-    @Operation(summary = "创建支付单")
+    @Operation(summary = "")
     @PostMapping("/order/create")
     public SingleResponse<PayOrderCreateDTO> createPayOrder(@RequestBody @Validated PayOrderCreateCmd reqDTO) {
         return SingleResponse.ok(payOrderService.createPayOrder(reqDTO));
