@@ -33,7 +33,7 @@ public class PayNotifyRecordService extends ServiceImpl<PayNotifyRecordMapper, P
 
     public PageResponse<PayNotifyRecordRespDTO> queryPages(PayNotifyRecordPageQueryReqDTO queryDTO) {
         IPage<PayNotifyRecordRespDTO> page = lambdaQuery()
-                .orderByDesc(BaseEntity::getGmtCreate)
+                .orderByDesc(BaseEntity::getCreateTime)
                 .page(new Page<>(queryDTO.getCurrent(), queryDTO.getSize()))
                 .convert(item -> BeanConvertor.copy(item, PayNotifyRecordRespDTO.class));
         return BeanConvertor.copyPage(page, PayNotifyRecordRespDTO.class);

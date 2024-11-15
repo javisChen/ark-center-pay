@@ -33,7 +33,7 @@ public class PayTypeService extends ServiceImpl<PayTypeMapper, PayTypeDO> implem
 
     public PageResponse<PayTypeRespDTO> getPageList(PayTypePageQueryReqDTO queryDTO) {
         IPage<PayTypeRespDTO> page = lambdaQuery()
-                .orderByDesc(BaseEntity::getGmtCreate)
+                .orderByDesc(BaseEntity::getCreateTime)
                 .page(new Page<>(queryDTO.getCurrent(), queryDTO.getSize()))
                 .convert(item -> BeanConvertor.copy(item, PayTypeRespDTO.class));
         return BeanConvertor.copyPage(page, PayTypeRespDTO.class);
